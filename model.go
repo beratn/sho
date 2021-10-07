@@ -1,9 +1,8 @@
 package main
 
 import (
-	"log"
-
 	"gorm.io/gorm"
+	"log"
 )
 
 type link struct {
@@ -24,11 +23,16 @@ func (l *link) getTargetById(id string) {
 
 func (l *link) createLink() {
 	db := GetDb()
-	result := db.Select("Target").Create(&l)
+	result := db.Create(&l)
 
 	if result == nil {
 		log.Fatal("An error occurred while creating link")
 	}
+}
+
+func (l *link) setCache() {
+	client := GetRedisClient()
+	client.Set(l.Address, l.Target, 0)
 }
 
 func CheckAddressIsExists(id string) bool {

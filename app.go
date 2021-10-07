@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"github.com/go-redis/redis"
 	"log"
 	"net/http"
 
@@ -13,6 +14,7 @@ import (
 type App struct {
 	Router *mux.Router
 	DB     *gorm.DB
+	Redis  *redis.Client
 }
 
 func (a *App) Initialize() {
@@ -21,6 +23,7 @@ func (a *App) Initialize() {
 
 	a.DB = InitDb()
 	a.DB.AutoMigrate(&link{})
+	a.Redis = InitRedis()
 }
 
 func respondWithError(w http.ResponseWriter, code int, message string) {

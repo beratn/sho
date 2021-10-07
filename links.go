@@ -40,20 +40,26 @@ func (a *App) createLink(w http.ResponseWriter, r *http.Request) {
 	}
 	l.Address = generatedId
 	l.createLink()
+	l.setCache()
 	respondWithJSON(w, http.StatusCreated, l)
 }
 
 func (a *App) redirect(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
-
 	if id == "" {
 		respondWithError(w, http.StatusBadRequest, "Invalid ID")
 		return
 	}
 
 	l := link{}
-	l.getTargetById(id)
+	res := a.Redis.Get(id).Val()
 
-	http.Redirect(w, r, l.Target, http.StatusMovedPermanently)
+	if res == "" {
+		l.getTargetById(id)
+		res = l.Target
+		l.setCache()
+	}
+
+	http.Redirect(w, r, res, http.StatusMovedPermanently)
 }
