@@ -16,6 +16,8 @@
 Request:
 
 **POST** /
+
+Try it via https://ts7p7oopf5.execute-api.us-east-2.amazonaws.com/dev
 ```
 {
     "target: "https://beratnakip.com"
@@ -38,6 +40,8 @@ Response:
 ### Redirect
 
 **GET** /{id}
+
+Try it via https://ts7p7oopf5.execute-api.us-east-2.amazonaws.com/dev/3qNfHK
 
 ```
 http://localhost:8010/9F3qNf
@@ -76,5 +80,8 @@ If the previous command ran successfully you should now be able to hit the follo
 **SAM CLI** is used to emulate both Lambda and API Gateway locally and uses our `template.yaml` to understand how to bootstrap this environment (runtime, where the source code is, etc.) - The following excerpt is what the CLI will read in order to initialize an API and its routes:
 
 ## TODO
-- URL Stats
-- Url Expirity
+- URL Statistics
+- Url Expire
+
+## LICENSE
+`sho` is released under ¨the [Apache License 2.0](https://github.com/beratn/sho/blob/master/LICENSE)
