@@ -6,7 +6,7 @@ useDotenv: true
 provider:
   name: aws
   runtime: go1.x
-  region: ${env:AWS_REGION}
+  region: us-east-2
 
 package:
   exclude:
@@ -14,45 +14,18 @@ package:
   include:
     - ./bin/**
 
-custom:
-  dbHost: ${env:DB_HOST}
-  dbUsername: ${env:DB_USERNAME}
-  dbPassword: ${env:DB_PASSWORD}
-  dbName: ${env:DB_NAME}
-  dbPort: ${env:DB_PORT}
-  redisHost: ${env:REDIS_HOST}
-  redisPort: ${env:REDIS_PORT}
-  redisPassword: ${env:REDIS_PASSWORD}
-  redisDb: ${env:REDIS_DB}
-
 functions:
   redirect:
     handler: bin/redirect
-    environment:
-      DB_HOST: ${env:self:custom.dbHost}
-      DB_USERNAME: ${env:self:custom.dbUsername}
-      DB_PASSWORD: ${env:self:custom.dbPassword}
-      DB_NAME: ${env:self:custom.dbName}
-      DB_PORT: ${env:self:custom.dbPort}
-      REDIS_HOST: ${env:self:custom.redisHost}
-      REDIS_PORT: ${env:self:custom.redisPort}
-      REDIS_PASSWORD: ${env:self:custom.redisPassword}
-      REDIS_DB: ${env:self:custom.redisDb}
+    environment: ${file(env.json)}
     events:
       - http:
+          path: /{id}
           method: get
   create:
     handler: bin/create
-    environment:
-      DB_HOST: ${env:self:custom.dbHost}
-      DB_USERNAME: ${env:self:custom.dbUsername}
-      DB_PASSWORD: ${env:self:custom.dbPassword}
-      DB_NAME: ${env:self:custom.dbName}
-      DB_PORT: ${env:self:custom.dbPort}
-      REDIS_HOST: ${env:self:custom.redisHost}
-      REDIS_PORT: ${env:self:custom.redisPort}
-      REDIS_PASSWORD: ${env:self:custom.redisPassword}
-      REDIS_DB: ${env:self:custom.redisDb}
+    environment: ${file(env.json)}
     events:
       - http:
+          path: /
           method: post

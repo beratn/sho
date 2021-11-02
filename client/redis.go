@@ -2,7 +2,6 @@ package client
 
 import (
 	"github.com/go-redis/redis"
-	"github.com/joho/godotenv"
 	"log"
 	"os"
 	"strconv"
@@ -15,11 +14,6 @@ func InitRedis() *redis.Client {
 
 	if client != nil {
 		return client
-	}
-
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
 	}
 
 	addr := os.Getenv("REDIS_HOST") + ":" + os.Getenv("REDIS_PORT")

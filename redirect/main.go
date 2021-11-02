@@ -1,7 +1,8 @@
-package redirect
+package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/beratn/sho/model"
@@ -21,6 +22,7 @@ func main() {
 func redirect(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	id, found := request.PathParameters["id"]
 
+	fmt.Print("id: " + id)
 	if !found {
 		return events.APIGatewayProxyResponse{Body: "Invalid ID", StatusCode: 401}, nil
 	}
@@ -34,6 +36,12 @@ func redirect(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResp
 		l.SetCache()
 	}
 
+	if l.Target == "" {
+		return events.APIGatewayProxyResponse{StatusCode: 404}, nil
+	}
+
 	js, _ := json.Marshal(l)
-	return events.APIGatewayProxyResponse{Body: string(js), StatusCode: 200}, nil
+	return events.APIGatewayProxyResponse{Body: string(js), StatusCode: 301, Headers: map[string]string{
+		"Location": l.Target,
+	}}, nil
 }

@@ -1,0 +1,61 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'sho-serverless
+
+  Sample SAM Template for sho-serverless
+
+  '
+Globals:
+  Function:
+    Timeout: 5
+Resources:
+  CreateFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: CreateFunction
+      Handler: create
+      Runtime: go1.x
+      Tracing: Active
+      Events:
+        CatchAll:
+          Type: Api
+          Properties:
+            Path: /create
+            Method: POST
+      Environment:
+        Variables:
+          REDIS_HOSTNAME: null
+          REDIS_PASSWORD: null
+          DB_PASSWORD: null
+          REDIS_DB: null
+          DB_PORT: null
+          APP_HOST: null
+          DB_NAME: null
+          DB_HOST: null
+          APP_PORT: null
+          DB_USERNAME: null
+  RedirectFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: RedirectFunction
+      Handler: redirect
+      Runtime: go1.x
+      Tracing: Active
+      Events:
+        CatchAll:
+          Type: Api
+          Properties:
+            Path: /{id}
+            Method: GET
+      Environment:
+        Variables:
+          REDIS_HOSTNAME: null
+          REDIS_PASSWORD: null
+          DB_PASSWORD: null
+          REDIS_DB: null
+          DB_PORT: null
+          APP_HOST: null
+          DB_NAME: null
+          DB_HOST: null
+          APP_PORT: null
+          DB_USERNAME: null
